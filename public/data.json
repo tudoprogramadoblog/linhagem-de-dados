@@ -1,0 +1,182 @@
+{
+  "sections": [
+    {
+      "id": "raw",
+      "label": "Camada Raw",
+      "color": "#CD7F32"
+    },
+    {
+      "id": "staging",
+      "label": "Camada Staging",
+      "color": "#C0C0C0"
+    },
+    {
+      "id": "dw",
+      "label": "Data Warehouse",
+      "color": "#FFFF00"
+    },
+    {
+      "id": "report",
+      "label": "Relatórios",
+      "color": "#FFFF00"
+    }
+  ],
+  "tables": [
+    {
+      "id": "1",
+      "section": "raw",
+      "label": "Clientes (Raw)",
+      "attributes": [
+        { "name": "id_cliente", "pk": true },
+        { "name": "nome" },
+        { "name": "email" },
+        { "name": "data_cadastro" }
+      ]
+    },
+    {
+      "id": "2",
+      "section": "raw",
+      "label": "Pedidos (Raw)",
+      "attributes": [
+        { "name": "id_pedido", "pk": true },
+        { "name": "id_cliente", "fk": true },
+        { "name": "id_produto" },
+        { "name": "data_venda" },
+        { "name": "localidade" },
+        { "name": "valor" }
+      ]
+    },
+    {
+      "id": "7",
+      "section": "raw",
+      "label": "Produtos (Raw)",
+      "attributes": [
+        { "name": "id_produto", "pk": true },
+        { "name": "nome_produto" },
+        { "name": "marca" },
+        { "name": "preco_custo" }
+      ]
+    },
+    {
+      "id": "3",
+      "section": "staging",
+      "label": "Clientes Limpos",
+      "attributes": [
+        { "name": "id_cliente", "pk": true },
+        { "name": "nome" },
+        { "name": "email_validado" }
+      ]
+    },
+    {
+      "id": "4",
+      "section": "staging",
+      "label": "Pedidos Validados",
+      "attributes": [
+        { "name": "id_pedido", "pk": true },
+        { "name": "id_cliente", "fk": true },
+        { "name": "id_produto", "fk": true },
+        { "name": "data_venda" },
+        { "name": "cidade" },
+        { "name": "estado" },
+        { "name": "valor" }
+      ]
+    },
+    {
+      "id": "8",
+      "section": "staging",
+      "label": "Produtos Limpos",
+      "attributes": [
+        { "name": "id_produto", "pk": true },
+        { "name": "nome_padronizado" },
+        { "name": "categoria" },
+        { "name": "margem" }
+      ]
+    },
+    {
+      "id": "9",
+      "section": "dw",
+      "label": "Dim Produto",
+      "attributes": [
+        { "name": "sk_produto", "pk": true },
+        { "name": "id_produto_origem" },
+        { "name": "categoria" },
+        { "name": "is_ativo" }
+      ]
+    },
+    {
+      "id": "10",
+      "section": "dw",
+      "label": "Dim Data",
+      "attributes": [
+        { "name": "sk_data", "pk": true },
+        { "name": "data_completa" },
+        { "name": "ano" },
+        { "name": "trimestre" }
+      ]
+    },
+    {
+      "id": "11",
+      "section": "dw",
+      "label": "Dim Geografia",
+      "attributes": [
+        { "name": "sk_geo", "pk": true },
+        { "name": "cidade" },
+        { "name": "estado" },
+        { "name": "regiao" }
+      ]
+    },
+    {
+      "id": "5",
+      "section": "dw",
+      "label": "Fato Vendas",
+      "attributes": [
+        { "name": "sk_pedido", "pk": true },
+        { "name": "sk_cliente", "fk": true },
+        { "name": "sk_produto", "fk": true },
+        { "name": "sk_data", "fk": true },
+        { "name": "sk_geo", "fk": true },
+        { "name": "valor_total" },
+        { "name": "quantidade" }
+      ]
+    },
+    {
+      "id": "6",
+      "section": "report",
+      "label": "Relatório Gerencial",
+      "attributes": [
+        { "name": "nome" },
+        { "name": "total_compras" },
+        { "name": "qtde_pedidos" }
+      ]
+    },
+    {
+      "id": "12",
+      "section": "report",
+      "label": "Dashboard de Produtos",
+      "attributes": [
+        { "name": "categoria" },
+        { "name": "total_vendas" },
+        { "name": "margem_liquida" }
+      ]
+    }
+  ],
+  "edges": [
+    { "id": "e1-3", "source": "1", "target": "3", "label": "limpeza" },
+    { "id": "e2-4", "source": "2", "target": "4", "label": "validação" },
+    { "id": "e7-8", "source": "7", "target": "8", "label": "deduplicação" },
+    
+    { "id": "e8-9", "source": "8", "target": "9", "label": "carga_dim" },
+
+    { "id": "e4-10", "source": "4", "target": "10", "label": "extração_data" },
+    { "id": "e4-11", "source": "4", "target": "11", "label": "geocodificação" },
+    
+    { "id": "e3-5", "source": "3", "target": "5", "label": "lookup(cliente)" },
+    { "id": "e4-5", "source": "4", "target": "5", "label": "lookup(fato)" },
+    { "id": "e9-5", "source": "9", "target": "5", "label": "lookup(produto)" },
+    { "id": "e10-5", "source": "10", "target": "5", "label": "lookup(data)" },
+    { "id": "e11-5", "source": "11", "target": "5", "label": "lookup(geo)" },
+    
+    { "id": "e5-6", "source": "5", "target": "6", "label": "agregação" },
+    { "id": "e5-12", "source": "5", "target": "12", "label": "soma_vendas" }
+  ]
+}

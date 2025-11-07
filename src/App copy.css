@@ -1,0 +1,22 @@
+.table-node {
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #f9f9f9;
+  padding: 8px;
+  min-width: 160px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.table-header {
+  font-weight: bold;
+  background: #ddd;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.attributes-list {
+  margin-top: 5px;
+  padding-left: 15px;
+}
